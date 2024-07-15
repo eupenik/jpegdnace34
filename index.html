@@ -90,6 +90,26 @@
       'images/00009_2048x1536.png': ['059', '080', '108', '146', '197', '266', '360'],
       'images/00010_2592x1946.png': ['060', '071', '084', '100', '119', '141', '168']
   };
+  imageVariationsNps = {
+    "00001_1192x832":  ["0.613", "0.722", "0.851", "1.002", "1.180", "1.390", "1.637"],
+    "00002_853x945":   ["0.294", "0.347", "0.410", "0.484", "0.572", "0.676", "0.798"],
+    "00003_945x840":   ["0.196", "0.249", "0.317", "0.402", "0.511", "0.649", "0.825"],
+    "00004_2000x2496": ["0.253", "0.304", "0.365", "0.439", "0.527", "0.633", "0.760"],
+    "00005_560x888":   ["0.351", "0.437", "0.543", "0.675", "0.839", "1.044", "1.298"],
+    "00006_2048x1536": ["0.395", "0.487", "0.600", "0.740", "0.912", "1.124", "1.386"],
+    "00007_1600x1200": ["0.304", "0.374", "0.461", "0.568", "0.700", "0.862", "1.061"],
+    "00008_1430x1834": ["0.477", "0.604", "0.764", "0.967", "1.225", "1.550", "1.962"],
+    "00009_2048x1536": ["0.322", "0.435", "0.589", "0.796", "1.076", "1.455", "1.968"],
+    "00010_2592x1946": ["0.326", "0.387", "0.460", "0.547", "0.650", "0.772", "0.917"]
+  }
+  const bppToNpp = {};
+  for (const [imagePath, variations] of Object.entries(imageVariations)) {
+    const imageKey = imagePath.split('/')[1].split('.')[0]; // Extract the key to match imageVariationsNps keys
+    const npsValues = imageVariationsNps[imageKey];
+    variations.forEach((variation, index) => {
+        bppToNpp[variation] = npsValues[index];
+    });
+  }
 
   let currentBaseImage = 'images/00001_1192x832.png';
   let currentBaseVariation = 'VM_00001_1192x832';
@@ -120,7 +140,7 @@
       variations.forEach((variation, index) => {
           const button = document.createElement('button');
           button.className = 'btn btn-secondary';
-          button.textContent = variation;
+          button.textContent = bppToNpp[variation];
           button.onclick = () => {
               showVariation(variation);
               currentVariation = variation;
