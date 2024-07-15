@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap 5 Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="main.js"></script>
+  <style>
+    body {
+        background-color: #a0a0a0; /* Neutral grey background */
+    }
+    .img-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align items to the top */
+        height: auto;
+        /* border: 1px solid #ddd; */
+        background-color: #a0a0a0;
+        margin-bottom: 20px;
+    }
+    .img-container img {
+        width: auto;
+        height: auto;
+        image-rendering: pixelated;
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .variation-buttons {
+        margin-bottom: 15px;
+    }
+    .btn-group-vertical .btn.active,
+    .variation-buttons .btn.active {
+        background-color: #007bff;
+        color: white;
+    }
+    .btn-group-vertical .btn,
+    .variation-buttons .btn {
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="container-fluid p-5 bg-primary text-white text-center">
+  <h1>JPEG DNA CE3.4 Learning-based image coding as alternative source-channel coding</h1>
+  <p>Updated: 2024-07-15</p>
+  <p>Select the image on the left and the JPEG AI bitrate on the top from the image. CLICK AND HOLD ON THE IMAGE TO SEE THE UNCOMPRESSED ORIGINAL.</p>
+</div>
+
+<div class="container mt-5">
+  <div class="row align-items-start">
+      <div class="variation-buttons text-center" id="variationButtons">
+          <!-- Variation buttons will be populated here -->
+      </div>
+  </div>
+  <div class="row align-items-start">
+      <div class="col-md-2">
+          <div class="btn-group-vertical" id="baseImageButtons">
+              <button class="btn btn-primary" onclick="selectImageBase('images/00001_1192x832.png', 'VM_00001_1192x832')">Image 1</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00002_853x945.png', 'VM_00002_853x945')">Image 2</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00003_945x840.png', 'VM_00003_945x840')">Image 3</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00004_2000x2496.png', 'VM_00004_2000x2496')">Image 4</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00005_560x888.png', 'VM_00005_560x888')">Image 5</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00006_2048x1536.png', 'VM_00006_2048x1536')">Image 6</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00007_1600x1200.png', 'VM_00007_1600x1200')">Image 7</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00008_1430x1834.png', 'VM_00008_1430x1834')">Image 8</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00009_2048x1536.png', 'VM_00009_2048x1536')">Image 9</button>
+              <button class="btn btn-primary" onclick="selectImageBase('images/00010_2592x1946.png', 'VM_00010_2592x1946')">Image 10</button>
+          </div>
+      </div>
+      <div class="col-md-10">
+          <div class="img-container" id="imageDisplay">
+              <img src="images/00001_1192x832.png" alt="Selected Image" id="selectedImage">
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  const imageVariations = {
+      'images/00001_1192x832.png': ['112', '132', '156', '183', '216', '254', '300'],
+      'images/00002_853x945.png': ['054', '064', '075', '089', '105', '124', '146'],
+      'images/00003_945x840.png': ['036', '046', '058', '074', '094', '119', '151'],
+      'images/00004_2000x2496.png': ['046', '056', '067', '080', '096', '116', '139'],
+      'images/00005_560x888.png': ['064', '080', '099', '124', '154', '191', '238'],
+      'images/00006_2048x1536.png': ['072', '089', '110', '135', '167', '206', '254'],
+      'images/00007_1600x1200.png': ['056', '068', '084', '104', '128', '158', '194'],
+      'images/00008_1430x1834.png': ['087', '111', '140', '177', '224', '284', '359'],
+      'images/00009_2048x1536.png': ['059', '080', '108', '146', '197', '266', '360'],
+      'images/00010_2592x1946.png': ['060', '071', '084', '100', '119', '141', '168']
+  };
+
+  let currentBaseImage = 'images/00001_1192x832.png';
+  let currentBaseVariation = 'VM_00001_1192x832';
+  let originalImage = currentBaseImage;
+  let currentVariation = imageVariations[currentBaseImage][0];
+
+  function selectImageBase(imageSrc, baseVariation) {
+      currentBaseImage = imageSrc;
+      currentBaseVariation = baseVariation;
+      originalImage = imageSrc;
+      currentVariation = imageVariations[imageSrc][0];
+      document.getElementById('selectedImage').src = `images/${currentBaseVariation}_${currentVariation}.png`;
+      populateVariationButtons(imageVariations[imageSrc]);
+
+      // Update the active state for the base image buttons
+      const baseImageButtons = document.querySelectorAll('#baseImageButtons .btn');
+      baseImageButtons.forEach(button => {
+          button.classList.remove('active');
+          if (button.textContent.trim() === `Image ${Object.keys(imageVariations).indexOf(imageSrc) + 1}`) {
+              button.classList.add('active');
+          }
+      });
+  }
+
+  function populateVariationButtons(variations) {
+      const variationButtonsContainer = document.getElementById('variationButtons');
+      variationButtonsContainer.innerHTML = ''; // Clear existing buttons
+      variations.forEach((variation, index) => {
+          const button = document.createElement('button');
+          button.className = 'btn btn-secondary';
+          button.textContent = variation;
+          button.onclick = () => {
+              showVariation(variation);
+              currentVariation = variation;
+
+              // Update the active state for the variation buttons
+              const variationButtons = document.querySelectorAll('#variationButtons .btn');
+              variationButtons.forEach(btn => btn.classList.remove('active'));
+              button.classList.add('active');
+          };
+          variationButtonsContainer.appendChild(button);
+          if (index === 0) {
+              button.classList.add('active'); // Set the first variation as active by default
+          }
+      });
+  }
+
+  function showVariation(variation) {
+      if (!currentBaseImage || !currentBaseVariation) return;
+      const variationImageSrc = `images/${currentBaseVariation}_${variation}.png`;
+      document.getElementById('selectedImage').src = variationImageSrc;
+  }
+
+  document.getElementById('selectedImage').addEventListener('mousedown', function() {
+      document.getElementById('selectedImage').src = originalImage;
+  });
+
+  document.getElementById('selectedImage').addEventListener('mouseup', function() {
+      if (!currentBaseImage || !currentBaseVariation || !currentVariation) return;
+      const variationImageSrc = `images/${currentBaseVariation}_${currentVariation}.png`;
+      document.getElementById('selectedImage').src = variationImageSrc;
+  });
+
+  // Initialize the first image and its variations on page load
+  document.addEventListener('DOMContentLoaded', () => {
+      populateVariationButtons(imageVariations[currentBaseImage]);
+      document.querySelector('#baseImageButtons .btn').classList.add('active'); // Highlight the first base image button
+      document.getElementById('selectedImage').src = `images/${currentBaseVariation}_${currentVariation}.png`; // Set the first variation as active by default
+  });
+</script>
+<script src="js/jquery-3.7.1.slim.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+
+
+
+</body>
+</html>
